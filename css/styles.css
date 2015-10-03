@@ -3,6 +3,7 @@
 body {
 	background: #08121A;
 	background-image: url('../img2.jpg');
+    width: auto;
 	background-repeat: no-repeat;
 	margin:0;
 	padding:0;
