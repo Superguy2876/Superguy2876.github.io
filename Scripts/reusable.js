@@ -3,8 +3,7 @@
  */
 
 function reusable(identity) {
-    document.getElementById(identity).innerHTML = "<script src=\"Scripts/" + identity + "\"></script>";
-    //document.getElementById(identity).innerHTML = "<p>this is a header </p>";
+    document.getElementById(identity).innerHTML = "<p>this is a " + identity + "</p>";
 }
 
 
