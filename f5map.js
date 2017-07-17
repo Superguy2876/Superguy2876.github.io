@@ -99,7 +99,7 @@ strokeColor: "#FF0000",
 strokeOpacity: 0.8,
 strokeWeight: 2,
 fillColor: "#0000FF",
-fillOpacity: 0.6
+fillOpacity: 0.1
 }
 var it = new google.maps.Polygon(polyOptions);
 it.setMap(map);
