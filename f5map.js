@@ -121,7 +121,7 @@ function initMap() {
   var it = new google.maps.Polygon(polyOptions);
   
   for (i = 0; i < f5locations.length; i++)
-    {s
+    {
       new google.maps.Marker({
         position: f5locations[i],
         map: map
