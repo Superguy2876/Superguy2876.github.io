@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Japanese Word Frequency Counter</title>
-    <script src="https://cdn.jsdelivr.net/npm/tiny-segmenter@0.2.0/dist/tiny-segmenter-0.2.0.min.js"></script>
 </head>
 <body>
     <h1>Japanese Word Frequency Counter</h1>
@@ -10,35 +9,33 @@
         <textarea id="inputText" rows="4" cols="50"></textarea><br>
         <button type="submit">Count Words</button>
     </form>
+    <div id="progress">Progress: 0%</div>
     <div id="output"></div>
 
     <script>
+        if (window.Worker) {
+            var myWorker = new Worker("worker.js");
+        }
+
         document.getElementById('wordForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
             const inputText = document.getElementById('inputText').value;
-            var segmenter = new TinySegmenter();
-            var segs = segmenter.segment(inputText);
-            var wordCounts = new Map();
+            myWorker.postMessage(inputText);
 
-            for (var i = 0; i < segs.length; i++) {
-                if (wordCounts.has(segs[i])) {
-                    wordCounts.set(segs[i], wordCounts.get(segs[i]) + 1);
-                } else {
-                    wordCounts.set(segs[i], 1);
+            myWorker.onmessage = function(e) {
+                if (e.data.type === 'progress') {
+                    document.getElementById('progress').textContent = "Progress: " + e.data.data + "%";
+                } else if (e.data.type === 'result') {
+                    document.getElementById('progress').textContent = "Progress: " + "100%";
+                    const outputDiv = document.getElementById('output');
+                    outputDiv.innerHTML = "";
+                    
+                    e.data.data.forEach(([key, value]) => {
+                        outputDiv.innerHTML += "<p>" + key + ": " + value + "</p>";
+                    });
                 }
             }
-
-            // Sort wordCounts by value in descending order
-            const sortedWordCounts = new Map([...wordCounts.entries()].sort((a, b) => b[1] - a[1]));
-
-            const outputDiv = document.getElementById('output');
-            outputDiv.innerHTML = "";
-
-            // Output the results
-            sortedWordCounts.forEach((value, key) => {
-                outputDiv.innerHTML += "<p>" + key + ": " + value + "</p>";
-            });
         });
     </script>
 </body>
