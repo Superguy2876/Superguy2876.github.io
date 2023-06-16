@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Japanese Word Frequency Counter</title>
+    <script src="https://cdn.jsdelivr.net/npm/tiny-segmenter@0.2.0/dist/tiny-segmenter-0.2.0.min.js"></script>
+</head>
+<body>
+    <h1>Japanese Word Frequency Counter</h1>
+    <form id="wordForm">
+        <textarea id="inputText" rows="4" cols="50"></textarea><br>
+        <button type="submit">Count Words</button>
+    </form>
+    <div id="output"></div>
+    
+    <script>
+        document.getElementById('wordForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Grab the user's input
+            const inputText = document.getElementById('inputText').value;
+
+            // Initialize TinySegmenter
+            var segmenter = new TinySegmenter();
+
+            // Segment the input text
+            var segs = segmenter.segment(inputText);
+
+            // Create a map to hold word counts
+            var wordCounts = new Map();
+
+            // Iterate through the segments
+            for (var i = 0; i < segs.length; i++) {
+                // If the word is already in the map, increment its count
+                if (wordCounts.has(segs[i])) {
+                    wordCounts.set(segs[i], wordCounts.get(segs[i]) + 1);
+                }
+                // Otherwise, add the word to the map with a count of 1
+                else {
+                    wordCounts.set(segs[i], 1);
+                }
+            }
+
+            // Get the output element
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = "";
+
+            // Output the results
+            wordCounts.forEach((value, key) => {
+                outputDiv.innerHTML += "<p>" + key + ": " + value + "</p>";
+            });
+        });
+    </script>
+</body>
+</html>
