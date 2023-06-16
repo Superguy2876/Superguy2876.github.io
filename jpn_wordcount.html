@@ -11,41 +11,32 @@
         <button type="submit">Count Words</button>
     </form>
     <div id="output"></div>
-    
+
     <script>
         document.getElementById('wordForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
-            // Grab the user's input
             const inputText = document.getElementById('inputText').value;
-
-            // Initialize TinySegmenter
             var segmenter = new TinySegmenter();
-
-            // Segment the input text
             var segs = segmenter.segment(inputText);
-
-            // Create a map to hold word counts
             var wordCounts = new Map();
 
-            // Iterate through the segments
             for (var i = 0; i < segs.length; i++) {
-                // If the word is already in the map, increment its count
                 if (wordCounts.has(segs[i])) {
                     wordCounts.set(segs[i], wordCounts.get(segs[i]) + 1);
-                }
-                // Otherwise, add the word to the map with a count of 1
-                else {
+                } else {
                     wordCounts.set(segs[i], 1);
                 }
             }
 
-            // Get the output element
+            // Sort wordCounts by value in descending order
+            const sortedWordCounts = new Map([...wordCounts.entries()].sort((a, b) => b[1] - a[1]));
+
             const outputDiv = document.getElementById('output');
             outputDiv.innerHTML = "";
 
             // Output the results
-            wordCounts.forEach((value, key) => {
+            sortedWordCounts.forEach((value, key) => {
                 outputDiv.innerHTML += "<p>" + key + ": " + value + "</p>";
             });
         });
